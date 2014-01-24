@@ -10,10 +10,7 @@ JSON API allows you to retrieve and manipulate WordPress content using HTTP requ
 
 This plugin was created at [The Museum of Modern Art](http://moma.org/) for the weblog [Inside/Out](http://moma.org/explore/inside_out), which is served from Ruby on Rails. Instead of reimplementing the site templates as a WordPress theme, we opted for a Rails front-end that displays content served from a WordPress back-end. JSON API provides the necessary interface for retrieving content and accepting comment submissions.
 
-See [Other Notes](http://wordpress.org/extend/plugins/json-api/other_notes/) for the complete documentation.
-
 ##Installation
-
 1. Upload the `json-api` folder to the `/wp-content/plugins/` directory or install directly through the plugin installer.
 2. Activate the plugin through the 'Plugins' menu in WordPress or by using the link provided by the plugin installer.
 
@@ -77,15 +74,12 @@ __Further reading__
 See [Request arguments](#request-arguments) for more information about request arguments to modify the response.
 
 ###Controllers
-
 The 1.0 release of JSON API introduced a modular controller system. This allows developers to flexibly add features to the API and give users more control over which methods they have enabled.
 
 #####The Core controller
-
 Most of the methods available prior to version 1.0 have been moved to the Core controller. The two exceptions are `submit_comment` and `create_post` which are now available from the Respond and Posts controllers, respectively. The Core controller is the only one enabled by default. All other functionality must be enabled from the JSON API Settings page (under Settings in the WordPress admin menu).
 
 #####Specifying a controller
-
 There are a few ways of specifying a controller, depending on how you are calling the API:
 
  - `http://www.example.org/?json=get_recent_posts` (`core` controller is implied, method is `get_recent_posts`)
@@ -351,7 +345,6 @@ Returns an array of posts/pages with a specific tag.
  - `slug` or `tag_slug` - set to the tag's URL slug
 
 #####Optional arguments
-
  - `count` - determines how many posts per page are returned (default value is 10)
  - `page` - return a specific page number from the results
  - `post_type` - used to retrieve custom post types
@@ -376,7 +369,6 @@ Returns an array of posts/pages with a specific tag.
 Returns an array of posts/pages written by a specific author.
 
 #####One of the following is required
-
  - Invoking the JSON API implicitly (i.e., `?json=1`) on an author archive page
  - `id` or `author_id` - set to the author's ID
  - `slug` or `author_slug` - set to the author's URL slug
