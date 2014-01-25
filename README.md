@@ -1,5 +1,5 @@
 #JSON API
-A RESTful API for WordPress
+A JSON API for WordPress
 
 ##Description
 JSON API allows you to retrieve and manipulate WordPress content using HTTP requests. There are three main goals:
@@ -45,7 +45,7 @@ This plugin was created at [The Museum of Modern Art](http://moma.org/) for the 
 
 ##General Concepts
 ###Requests
-Requests use a simple REST-style HTTP GET or POST. To invoke the API, include a non-empty query value for `json` in the URL.
+Requests use a simple HTTP GET or POST. To invoke the API, include a non-empty query value for `json` in the URL.
 
 JSON API operates in two modes:
 
