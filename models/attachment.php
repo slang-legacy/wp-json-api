@@ -1,7 +1,7 @@
 <?php
 
 class JSON_API_Attachment {
-  
+
   var $id;          // Integer
   var $url;         // String
   var $slug;        // String
@@ -10,7 +10,7 @@ class JSON_API_Attachment {
   var $caption;     // String
   var $parent;      // Integer
   var $mime_type;   // String
-  
+
   function JSON_API_Attachment($wp_attachment = null) {
     if ($wp_attachment) {
       $this->import_wp_object($wp_attachment);
@@ -19,7 +19,7 @@ class JSON_API_Attachment {
       }
     }
   }
-  
+
   function import_wp_object($wp_attachment) {
     $this->id = (int) $wp_attachment->ID;
     $this->url = $wp_attachment->guid;
@@ -30,11 +30,11 @@ class JSON_API_Attachment {
     $this->parent = (int) $wp_attachment->post_parent;
     $this->mime_type = $wp_attachment->post_mime_type;
   }
-  
+
   function is_image() {
     return (substr($this->mime_type, 0, 5) == 'image');
   }
-  
+
   function query_images() {
     $sizes = array('thumbnail', 'medium', 'large', 'full');
     if (function_exists('get_intermediate_image_sizes')) {
@@ -58,7 +58,7 @@ class JSON_API_Attachment {
       }
     }
   }
-  
+
 }
 
 ?>

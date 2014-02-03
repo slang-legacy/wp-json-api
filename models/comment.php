@@ -1,7 +1,7 @@
 <?php
 
 class JSON_API_Comment {
-  
+
   var $id;      // Integer
   var $name;    // String
   var $url;     // String
@@ -9,19 +9,19 @@ class JSON_API_Comment {
   var $content; // String
   var $parent;  // Integer
   var $author;  // Object (only if the user was registered & logged in)
-  
+
   function JSON_API_Comment($wp_comment = null) {
     if ($wp_comment) {
       $this->import_wp_object($wp_comment);
     }
   }
-  
+
   function import_wp_object($wp_comment) {
     global $json_api;
-    
+
     $date_format = $json_api->query->date_format;
     $content = apply_filters('comment_text', $wp_comment->comment_content);
-    
+
     $this->id = (int) $wp_comment->comment_ID;
     $this->name = $wp_comment->comment_author;
     $this->url = $wp_comment->comment_author_url;
@@ -29,14 +29,14 @@ class JSON_API_Comment {
     $this->content = $content;
     $this->parent = (int) $wp_comment->comment_parent;
     //$this->raw = $wp_comment;
-    
+
     if (!empty($wp_comment->user_id)) {
       $this->author = new JSON_API_Author($wp_comment->user_id);
     } else {
       unset($this->author);
     }
   }
-  
+
   function handle_submission() {
     global $comment, $wpdb;
     add_action('comment_id_not_found', array(&$this, 'comment_id_not_found'));
@@ -52,29 +52,29 @@ class JSON_API_Comment {
     $_POST['parent'] = $_REQUEST['parent'];
     include ABSPATH . 'wp-comments-post.php';
   }
-  
+
   function comment_id_not_found() {
     global $json_api;
     $json_api->error("Post ID '{$_REQUEST['post_id']}' not found.");
   }
-  
+
   function comment_closed() {
     global $json_api;
     $json_api->error("Post is closed for comments.");
   }
-  
+
   function comment_on_draft() {
     global $json_api;
     $json_api->error("You cannot comment on unpublished posts.");
   }
-  
+
   function comment_post_redirect() {
     global $comment, $json_api;
     $status = ($comment->comment_approved) ? 'ok' : 'pending';
     $new_comment = new JSON_API_Comment($comment);
     $json_api->response->respond($new_comment, $status);
   }
-  
+
 }
 
 ?>

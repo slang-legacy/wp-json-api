@@ -28,7 +28,7 @@ class JSON_API_Posts_Controller {
       'post' => $post
     );
   }
-  
+
   public function update_post() {
     global $json_api;
     $post = $json_api->introspector->get_current_post();
@@ -52,7 +52,7 @@ class JSON_API_Posts_Controller {
       'post' => $post
     );
   }
-  
+
   public function delete_post() {
     global $json_api;
     $post = $json_api->introspector->get_current_post();
@@ -79,7 +79,7 @@ class JSON_API_Posts_Controller {
     wp_delete_post($post->ID);
     return array();
   }
-  
+
 }
 
 ?>

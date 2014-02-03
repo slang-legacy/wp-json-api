@@ -7,7 +7,7 @@ language: php
 # Versions of PHP to test against
 php:
     - 5.5
-  
+
 # Specify versions of WordPress to test against
 # WP_VERSION = WordPress version number (use "master" for SVN trunk)
 # WP_MULTISITE = whether to test multisite (use either "0" or "1")

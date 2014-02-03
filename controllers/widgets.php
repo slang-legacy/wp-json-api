@@ -5,7 +5,7 @@ Controller description: Retrieve sidebar widgets
 */
 
 class JSON_API_Widgets_Controller {
-  
+
   function get_sidebar() {
     global $json_api;
     $index = @$_REQUEST['sidebar_id'];
@@ -14,7 +14,7 @@ class JSON_API_Widgets_Controller {
     } else if (!is_active_sidebar($index)) {
       $json_api->error("Sidebar '$index' is not active.");
     }
-    
+
     $widget_params = array(
       'before_widget',
       'after_widget',
@@ -27,9 +27,9 @@ class JSON_API_Widgets_Controller {
         $json_api_params[$param] = $_REQUEST[$param];
       }
     }
-    
+
     $widgets = array();
-    
+
     global $wp_registered_sidebars, $wp_registered_widgets;
 
     if ( is_int($index) ) {
@@ -43,25 +43,25 @@ class JSON_API_Widgets_Controller {
         }
       }
     }
-  
+
     $sidebars_widgets = wp_get_sidebars_widgets();
-  
+
     if ( empty($wp_registered_sidebars[$index]) || !array_key_exists($index, $sidebars_widgets) || !is_array($sidebars_widgets[$index]) || empty($sidebars_widgets[$index]) )
       return false;
-  
+
     $sidebar = $wp_registered_sidebars[$index];
-  
+
     $did_one = false;
     foreach ( (array) $sidebars_widgets[$index] as $id ) {
-  
+
       if ( !isset($wp_registered_widgets[$id]) ) continue;
-  
+
       $params = array_merge(
         array( array_merge( $sidebar, array('widget_id' => $id, 'widget_name' => $wp_registered_widgets[$id]['name']), $json_api_params ) ),
         (array) $wp_registered_widgets[$id]['params']
       );
-      
-  
+
+
       // Substitute HTML id and class attributes into before_widget
       $classname_ = '';
       foreach ( (array) $wp_registered_widgets[$id]['classname'] as $cn ) {
@@ -72,13 +72,13 @@ class JSON_API_Widgets_Controller {
       }
       $classname_ = ltrim($classname_, '_');
       $params[0]['before_widget'] = sprintf($params[0]['before_widget'], $id, $classname_);
-  
+
       $params = apply_filters( 'dynamic_sidebar_params', $params );
-  
+
       $callback = $wp_registered_widgets[$id]['callback'];
-  
+
       do_action( 'dynamic_sidebar', $wp_registered_widgets[$id] );
-  
+
       if ( is_callable($callback) ) {
         ob_start();
         $object = $callback[0];
@@ -96,13 +96,13 @@ class JSON_API_Widgets_Controller {
         ob_end_clean();
       }
     }
-    
+
     return array(
       'sidebar_id' => $index,
       'widgets' => $widgets
     );
   }
-  
+
 }
 
 ?>

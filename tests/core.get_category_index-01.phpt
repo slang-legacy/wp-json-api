@@ -1,5 +1,5 @@
 --TEST--
-core.get_category_index 
+core.get_category_index
 --FILE--
 <?php
 

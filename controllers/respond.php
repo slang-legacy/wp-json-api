@@ -5,7 +5,7 @@ Controller description: Comment/trackback submission methods
 */
 
 class JSON_API_Respond_Controller {
-  
+
   function submit_comment() {
     global $json_api;
     nocache_headers();
@@ -21,7 +21,7 @@ class JSON_API_Respond_Controller {
     $pending = new JSON_API_Comment();
     return $pending->handle_submission();
   }
-  
+
 }
 
 ?>

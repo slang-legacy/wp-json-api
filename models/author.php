@@ -1,7 +1,7 @@
 <?php
 
 class JSON_API_Author {
-  
+
   var $id;          // Integer
   var $slug;        // String
   var $name;        // String
@@ -10,11 +10,11 @@ class JSON_API_Author {
   var $nickname;    // String
   var $url;         // String
   var $description; // String
-  
+
   // Note:
   //   JSON_API_Author objects can include additional values by using the
   //   author_meta query var.
-  
+
   function JSON_API_Author($id = null) {
     if ($id) {
       $this->id = (int) $id;
@@ -31,14 +31,14 @@ class JSON_API_Author {
     $this->set_author_meta();
     //$this->raw = get_userdata($this->id);
   }
-  
+
   function set_value($key, $wp_key = false) {
     if (!$wp_key) {
       $wp_key = $key;
     }
     $this->$key = get_the_author_meta($wp_key, $this->id);
   }
-  
+
   function set_author_meta() {
     global $json_api;
     if (!$json_api->query->author_meta) {
@@ -56,7 +56,7 @@ class JSON_API_Author {
       $this->set_value($var);
     }
   }
-  
+
 }
 
 ?>

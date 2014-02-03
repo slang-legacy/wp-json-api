@@ -1,10 +1,10 @@
 <?php
 
 class JSON_API_Post {
-  
+
   // Note:
   //   JSON_API_Post objects must be instantiated within The Loop.
-  
+
   var $id;              // Integer
   var $type;            // String
   var $slug;            // String
@@ -25,14 +25,14 @@ class JSON_API_Post {
   var $comment_status;  // String ("open" or "closed")
   var $thumbnail;       // String
   var $custom_fields;   // Object (included by using custom_fields query var)
-  
+
   function JSON_API_Post($wp_post = null) {
     if (!empty($wp_post)) {
       $this->import_wp_object($wp_post);
     }
     do_action("json_api_{$this->type}_constructor", $this);
   }
-  
+
   function create($values = null) {
     unset($values['id']);
     if (empty($values) || empty($values['title'])) {
@@ -43,42 +43,42 @@ class JSON_API_Post {
     }
     return $this->save($values);
   }
-  
+
   function update($values) {
     $values['id'] = $this->id;
     return $this->save($values);
   }
-  
+
   function save($values = null) {
     global $json_api, $user_ID;
-    
+
     $wp_values = array();
-    
+
     if (!empty($values['id'])) {
       $wp_values['ID'] = $values['id'];
     }
-    
+
     if (!empty($values['type'])) {
       $wp_values['post_type'] = $values['type'];
     }
-    
+
     if (!empty($values['status'])) {
       $wp_values['post_status'] = $values['status'];
     }
-    
+
     if (!empty($values['title'])) {
       $wp_values['post_title'] = $values['title'];
     }
-    
+
     if (!empty($values['content'])) {
       $wp_values['post_content'] = $values['content'];
     }
-    
+
     if (!empty($values['author'])) {
       $author = $json_api->introspector->get_author_by_login($values['author']);
       $wp_values['post_author'] = $author->id;
     }
-    
+
     if (isset($values['categories'])) {
       $categories = explode(',', $values['categories']);
       foreach ($categories as $category_slug) {
@@ -91,7 +91,7 @@ class JSON_API_Post {
         }
       }
     }
-    
+
     if (isset($values['tags'])) {
       $tags = explode(',', $values['tags']);
       foreach ($tags as $tag_slug) {
@@ -103,13 +103,13 @@ class JSON_API_Post {
         }
       }
     }
-    
+
     if (isset($wp_values['ID'])) {
       $this->id = wp_update_post($wp_values);
     } else {
       $this->id = wp_insert_post($wp_values);
     }
-    
+
     if (!empty($_FILES['attachment'])) {
       include_once ABSPATH . '/wp-admin/includes/file.php';
       include_once ABSPATH . '/wp-admin/includes/media.php';
@@ -118,13 +118,13 @@ class JSON_API_Post {
       $this->attachments[] = new JSON_API_Attachment($attachment_id);
       unset($_FILES['attachment']);
     }
-    
+
     $wp_post = get_post($this->id);
     $this->import_wp_object($wp_post);
-    
+
     return $this->id;
   }
-  
+
   function import_wp_object($wp_post) {
     global $json_api, $post;
     $date_format = $json_api->query->date_format;
@@ -152,7 +152,7 @@ class JSON_API_Post {
     $this->set_custom_taxonomies($wp_post->post_type);
     do_action("json_api_import_wp_post", $this, $wp_post);
   }
-  
+
   function set_value($key, $value) {
     global $json_api;
     if ($json_api->include_value($key)) {
@@ -161,7 +161,7 @@ class JSON_API_Post {
       unset($this->$key);
     }
   }
-    
+
   function set_content_value() {
     global $json_api;
     if ($json_api->include_value('content')) {
@@ -173,7 +173,7 @@ class JSON_API_Post {
       unset($this->content);
     }
   }
-  
+
   function set_categories_value() {
     global $json_api;
     if ($json_api->include_value('categories')) {
@@ -192,7 +192,7 @@ class JSON_API_Post {
       unset($this->categories);
     }
   }
-  
+
   function set_tags_value() {
     global $json_api;
     if ($json_api->include_value('tags')) {
@@ -206,7 +206,7 @@ class JSON_API_Post {
       unset($this->tags);
     }
   }
-  
+
   function set_author_value($author_id) {
     global $json_api;
     if ($json_api->include_value('author')) {
@@ -215,7 +215,7 @@ class JSON_API_Post {
       unset($this->author);
     }
   }
-  
+
   function set_comments_value() {
     global $json_api;
     if ($json_api->include_value('comments')) {
@@ -224,7 +224,7 @@ class JSON_API_Post {
       unset($this->comments);
     }
   }
-  
+
   function set_attachments_value() {
     global $json_api;
     if ($json_api->include_value('attachments')) {
@@ -233,7 +233,7 @@ class JSON_API_Post {
       unset($this->attachments);
     }
   }
-  
+
   function set_thumbnail_value() {
     global $json_api;
     if (!$json_api->include_value('thumbnail') ||
@@ -253,7 +253,7 @@ class JSON_API_Post {
     $this->thumbnail = $image->url;
     $this->thumbnail_images = $attachment->images;
   }
-  
+
   function set_custom_fields_value() {
     global $json_api;
     if ($json_api->include_value('custom_fields')) {
@@ -275,7 +275,7 @@ class JSON_API_Post {
       unset($this->custom_fields);
     }
   }
-  
+
   function set_custom_taxonomies($type) {
     global $json_api;
     $taxonomies = get_taxonomies(array(
@@ -300,7 +300,7 @@ class JSON_API_Post {
       }
     }
   }
-  
+
   function get_thumbnail_size() {
     global $json_api;
     if ($json_api->query->thumbnail_size) {
@@ -313,7 +313,7 @@ class JSON_API_Post {
     }
     return 'thumbnail';
   }
-  
+
 }
 
 ?>
