@@ -3,7 +3,7 @@ echo "beginning of file...";
 
 /** Display verbose errors */
 define( 'IMPORT_DEBUG', false );
-$WP_CORE_DIR = '/var/www/';
+$WP_CORE_DIR = dirname(__FILE__) . '/../../www/';
 
 // Load Importer API
 require_once $WP_CORE_DIR . 'wp-admin/includes/import.php';
