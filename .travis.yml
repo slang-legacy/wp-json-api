@@ -1,20 +1,18 @@
 # Main Travis CI configuration file for wordpress-plugin tests
 # https://github.com/benbalter/wordpress-plugin-tests
 
-# Tell Travis CI we're using PHP
 language: php
 
-# Versions of PHP to test against
 php:
     - 5.5
 
-# Specify versions of WordPress to test against
-# WP_VERSION = WordPress version number (use "master" for SVN trunk)
-# WP_MULTISITE = whether to test multisite (use either "0" or "1")
 env:
-    - WP_VERSION=master WP_MULTISITE=0
+    - WP_VERSION=latest WP_MULTISITE=0
 
 install:
-    pear install HTTP_Client
+    - pear install HTTP_Client
 
-script: phpunit tests
+before_script:
+    - bash tests-data/setup.sh wordpress_test root '' localhost $WP_VERSION
+
+script: phpunit --bootstrap tests/bootstrap.php tests
